@@ -3,21 +3,49 @@ class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("ID check thingy: ");
+        Console.WriteLine("Eric is the best IT guy! ");
+        string[] targetDir = Directory.GetFiles(@"C:\Users\eric.nguyen\Documents");
+
         using (var reader = new StreamReader(@"C:\Users\eric.nguyen\Documents\test.csv"))
         {
+            bool seen = false;
+            string dir = "";
             reader.ReadLine(); //ignore first line
-            List<string> listA = new List<string>();
-            //List<string> listB = new List<string>();
-            while (!reader.EndOfStream)
-            {
-                var line = reader.ReadLine();
-                Console.WriteLine(line);
-                //var values = line.Split(';');
 
-                //listA.Add(values[0]);
-                //listB.Add(values[1]);
+            while (!reader.EndOfStream)// read ID file
+            {
+                var id = reader.ReadLine();// stores ID
+                for (int i = 0; i < targetDir.Length; i++)
+                {//loop the folder
+                    using (StreamReader sr = new StreamReader(targetDir[i]))// check current file
+                    {
+                        string contents = sr.ReadToEnd();
+                        if (contents.Contains(id))
+                        {
+                            seen = true;
+                            dir = targetDir[i];
+                            if (seen)
+                            {
+                                Console.Write(id);
+                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                Console.WriteLine(" " + seen.ToString() + " - " + dir);
+                                Console.ForegroundColor = ConsoleColor.White;
+                            }
+                            else
+                            {
+                                Console.Write(id);
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine(" " + seen.ToString());
+                                Console.ForegroundColor = ConsoleColor.White;
+                            }
+                            break;
+                        }
+                    }
+                    
+                    seen = false;
+                }
             }
+            
         }
     }
 }
